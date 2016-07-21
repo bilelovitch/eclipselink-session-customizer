@@ -20,6 +20,8 @@
  */
 package org.zalando.jpa.eclipselink;
 
+import java.sql.SQLException;
+
 import org.eclipse.persistence.internal.localization.LoggingLocalization;
 import org.eclipse.persistence.logging.AbstractSessionLog;
 import org.eclipse.persistence.logging.SessionLogEntry;
@@ -131,6 +133,7 @@ public class Slf4jSessionLog extends AbstractSessionLog {
 
                     if (shouldLogExceptionStackTrace()) {
                         LOG.error(sb.toString(), t);
+                        doExhaustiveLoggingIfExceptionCausedBySQLException(t);
                     } else {
                         LOG.error(sb.toString());
                     }
@@ -169,6 +172,19 @@ public class Slf4jSessionLog extends AbstractSessionLog {
                             LOG.info(sb.toString());
                     }
                 }
+            }
+        }
+    }
+
+    private void doExhaustiveLoggingIfExceptionCausedBySQLException(final Throwable throwable) {
+
+        // This is needed to really know what caused an SQLException. It will
+        // tell us e.g.  about violated constraints in the database. This
+        // makes debugging a lot simpler when database errors occur.
+        if (throwable.getCause() instanceof SQLException) {
+            SQLException sqlException = (SQLException) throwable.getCause();
+            for (Throwable nextException : sqlException) {
+                LOG.error("[SQLException nextException]", nextException);
             }
         }
     }
