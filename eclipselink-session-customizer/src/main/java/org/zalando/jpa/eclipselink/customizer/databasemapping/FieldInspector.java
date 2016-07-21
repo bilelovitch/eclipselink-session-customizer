@@ -28,17 +28,17 @@ import com.google.common.collect.Iterables;
 
 abstract class FieldInspector {
 
-	// TODO, check this, we have the same in AbstractColumnNameCustomizer
-	static EntityFieldInspector<? extends Annotation> getFieldInspector(final DatabaseMapping databaseMapping) {
-		final String attributeName = databaseMapping.getAttributeName();
-		final Class<?> entityClass = databaseMapping.getDescriptor().getJavaClass();
+    // TODO, check this, we have the same in AbstractColumnNameCustomizer
+    static EntityFieldInspector<? extends Annotation> getFieldInspector(final DatabaseMapping databaseMapping) {
+        final String attributeName = databaseMapping.getAttributeName();
+        final Class<?> entityClass = databaseMapping.getDescriptor().getJavaClass();
 
-		Set<Field> fieldsWithName = ReflectionUtils.getAllFields(entityClass, ReflectionUtils.withName(attributeName));
+        Set<Field> fieldsWithName = ReflectionUtils.getAllFields(entityClass, ReflectionUtils.withName(attributeName));
 
-		final Field field = Iterables.get(fieldsWithName, 0);
-		// final Field field = ReflectionUtils.findField(entityClass,
-		// attributeName);
-		return new ColumnFieldInspector(field);
-	}
+        final Field field = Iterables.get(fieldsWithName, 0);
+        // final Field field = ReflectionUtils.findField(entityClass,
+        // attributeName);
+        return new ColumnFieldInspector(field);
+    }
 
 }
