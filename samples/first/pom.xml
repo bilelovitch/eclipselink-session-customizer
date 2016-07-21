@@ -8,10 +8,6 @@
 	</parent>
 	<artifactId>first</artifactId>
 
-	<properties>
-		<eclipselink.version>2.6.1</eclipselink.version>
-	</properties>
-
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
